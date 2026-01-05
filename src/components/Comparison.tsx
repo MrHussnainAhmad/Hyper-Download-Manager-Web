@@ -2,7 +2,7 @@
 
 import { Check, X } from 'lucide-react';
 
-const rows = [
+const rows: [string, boolean, boolean, boolean][] = [
   ['Multi-threaded downloads', true, true, false],
   ['Pause & Resume', true, true, true],
   ['Batch downloads', true, true, false],
