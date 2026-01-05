@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== Base ===== */
+:root {
+  --primary: #0057b8;
+  --primary-dark: #004494;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #ffffff;
+  color: #111827;
+}
+
+/* ===== Layout ===== */
+.container-custom {
+  @apply max-w-6xl mx-auto px-4;
+}
+
+/* ===== Buttons ===== */
+.btn-primary {
+  @apply inline-flex items-center justify-center px-5 py-2
+  bg-primary text-white text-sm font-bold
+  border border-primary
+  hover:bg-primary-dark transition;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center px-5 py-2
+  bg-gray-100 text-gray-800 text-sm font-bold
+  border border-gray-300
+  hover:bg-gray-200 transition;
+}
+
+/* ===== Sections ===== */
+.section-title {
+  @apply text-2xl font-bold text-gray-900;
+}
+
+.section-subtitle {
+  @apply text-sm text-gray-600 mt-2 max-w-3xl;
+}
+
+/* ===== Boxes ===== */
+.box {
+  @apply border border-gray-300 bg-white;
+}
+
+/* ===== Forms ===== */
+.input-field {
+  @apply w-full px-3 py-2 border border-gray-300
+  text-sm focus:outline-none focus:border-primary;
+}
+
+.textarea-field {
+  @apply w-full px-3 py-2 border border-gray-300
+  text-sm focus:outline-none focus:border-primary;
+}
+
+/* ===== Tables ===== */
+.table {
+  @apply w-full border border-gray-300 text-sm;
+}
+
+.table th {
+  @apply bg-gray-100 border border-gray-300 px-3 py-2 text-left font-bold;
+}
+
+.table td {
+  @apply border border-gray-300 px-3 py-2;
+}

@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Review {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String
+  name      String
+  rating    Int
+  review    String
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("reviews")
+}
+
+model Bug {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  email       String
+  title       String
+  description String
+  type        String
+  status      String   @default("pending")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("bugs")
+}
+
+model Download {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  version   String
+  platform  String
+  createdAt DateTime @default(now())
+
+  @@map("downloads")
+}
+
+model Admin {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("admins")
+}
+
+model PlatformConfig {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  platform    String   @unique // 'windows' or 'linux'
+  version     String
+  downloadUrl String
+  updatedAt   DateTime @updatedAt
+
+  @@map("platform_configs")
+}
