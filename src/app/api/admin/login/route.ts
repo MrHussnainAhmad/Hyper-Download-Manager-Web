@@ -13,20 +13,26 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = loginSchema.parse(body);
 
+    console.log('Login attempt for:', validatedData.email);
+
     const admin = await prisma.admin.findUnique({
       where: { email: validatedData.email },
     });
 
     if (!admin) {
+      console.log('Login failed: Admin not found');
       return NextResponse.json(
         { error: 'Invalid credentials' },
         { status: 401 }
       );
     }
 
+    console.log('Admin found, verifying password...');
     const isPasswordValid = await bcrypt.compare(validatedData.password, admin.password);
+    console.log('Password valid:', isPasswordValid);
 
     if (!isPasswordValid) {
+      console.log('Login failed: Invalid password');
       return NextResponse.json(
         { error: 'Invalid credentials' },
         { status: 401 }
