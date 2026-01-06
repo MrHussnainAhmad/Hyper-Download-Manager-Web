@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import geoip from 'geoip-lite';
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,8 +16,15 @@ export async function POST(request: NextRequest) {
 
     console.log(`[Tracking] Download from IP: ${ip}`);
 
-    const geo = geoip.lookup(ip);
-    const country = geo ? geo.country : (ip === '127.0.0.1' ? 'Localhost' : 'Unknown');
+    let country = request.headers.get('x-vercel-ip-country');
+    
+    if (!country) {
+        if (ip === '127.0.0.1') {
+            country = 'Localhost';
+        } else {
+            country = 'Unknown';
+        }
+    }
 
     await prisma.download.create({
       data: {
