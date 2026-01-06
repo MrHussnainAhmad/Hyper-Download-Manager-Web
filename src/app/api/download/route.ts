@@ -16,15 +16,12 @@ export async function POST(request: NextRequest) {
 
     console.log(`[Tracking] Download from IP: ${ip}`);
 
-    let country = request.headers.get('x-vercel-ip-country');
+    const country = request.headers.get('x-vercel-ip-country') || 
+                    request.headers.get('cf-ipcountry') || 
+                    (request as any).geo?.country || 
+                    (ip === '127.0.0.1' || ip === '::1' ? 'Localhost' : 'Unknown');
     
-    if (!country) {
-        if (ip === '127.0.0.1') {
-            country = 'Localhost';
-        } else {
-            country = 'Unknown';
-        }
-    }
+    console.log(`[Tracking] Detected Country: ${country}`);
 
     await prisma.download.create({
       data: {
