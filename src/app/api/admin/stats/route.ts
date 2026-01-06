@@ -17,12 +17,24 @@ export async function GET() {
       },
     });
 
+    const downloadsByCountryRaw = await prisma.download.groupBy({
+      by: ['country'],
+      _count: {
+        id: true,
+      },
+    });
+
+    const downloadsByCountry = downloadsByCountryRaw
+      .sort((a, b) => b._count.id - a._count.id)
+      .slice(0, 10);
+
     return NextResponse.json({
       totalDownloads,
       totalBugs,
       totalReviews,
       pendingReviews,
       downloadsByPlatform,
+      downloadsByCountry,
     });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch stats' }, { status: 500 });

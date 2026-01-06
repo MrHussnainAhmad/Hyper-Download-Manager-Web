@@ -1,13 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { 
-  Download, 
-  Bug, 
-  MessageSquare, 
+import {
+  Download,
+  Bug,
+  MessageSquare,
   Clock,
   ArrowUpRight,
-  TrendingUp
+  TrendingUp,
+  Globe
 } from 'lucide-react';
 
 interface Stats {
@@ -16,6 +17,7 @@ interface Stats {
   totalReviews: number;
   pendingReviews: number;
   downloadsByPlatform: Array<{ platform: string; _count: { id: number } }>;
+  downloadsByCountry: Array<{ country: string | null; _count: { id: number } }>;
 }
 
 interface PlatformConfig {
@@ -85,7 +87,7 @@ export default function AdminDashboard() {
     return <div className="animate-pulse space-y-8">
       <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded-xl w-full"></div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[1,2,3,4].map(i => (
+        {[1, 2, 3, 4].map(i => (
           <div key={i} className="h-24 bg-gray-200 dark:bg-gray-700 rounded-xl"></div>
         ))}
       </div>
@@ -141,13 +143,41 @@ export default function AdminDashboard() {
                   <span className="text-sm font-medium dark:text-gray-300">{item._count.id}</span>
                 </div>
                 <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                  <div 
-                    className="bg-blue-600 h-2 rounded-full" 
+                  <div
+                    className="bg-blue-600 h-2 rounded-full"
                     style={{ width: `${(item._count.id / (stats.totalDownloads || 1)) * 100}%` }}
                   ></div>
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-bold dark:text-white flex items-center gap-2">
+              <Globe className="w-5 h-5 text-purple-600" />
+              Top Countries
+            </h2>
+          </div>
+          <div className="space-y-4">
+            {stats?.downloadsByCountry.map((item) => (
+              <div key={item.country || 'Unknown'}>
+                <div className="flex justify-between mb-1">
+                  <span className="text-sm font-medium dark:text-gray-300">{item.country || 'Unknown'}</span>
+                  <span className="text-sm font-medium dark:text-gray-300">{item._count.id}</span>
+                </div>
+                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                  <div
+                    className="bg-purple-600 h-2 rounded-full"
+                    style={{ width: `${(item._count.id / (stats.totalDownloads || 1)) * 100}%` }}
+                  ></div>
+                </div>
+              </div>
+            ))}
+            {(!stats?.downloadsByCountry || stats.downloadsByCountry.length === 0) && (
+              <p className="text-sm text-gray-500 text-center py-4">No data available yet</p>
+            )}
           </div>
         </div>
 
@@ -171,7 +201,7 @@ export default function AdminDashboard() {
           <Download className="w-5 h-5 text-green-600" />
           Download Configuration
         </h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {['windows', 'linux'].map(platform => {
             const config = configs.find(c => c.platform === platform) || { platform, version: '', downloadUrl: '' };
@@ -180,8 +210,8 @@ export default function AdminDashboard() {
                 <h3 className="font-bold capitalize dark:text-white">{platform}</h3>
                 <div>
                   <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Latest Version</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     value={config.version}
                     onChange={(e) => {
                       const newVersion = e.target.value;
@@ -193,8 +223,8 @@ export default function AdminDashboard() {
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Download URL (CDN/GitHub)</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     value={config.downloadUrl}
                     onChange={(e) => {
                       const newUrl = e.target.value;

@@ -26,6 +26,11 @@
 .vscode/
 .idea/
 *.log
+*.txt
+!requirements.txt
+build_log.txt
+build_error.txt
+build_error_*.txt
 
 # debug
 npm-debug.log*

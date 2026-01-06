@@ -37,6 +37,7 @@ model Download {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   version   String
   platform  String
+  country   String?  // Optional for backward compatibility
   createdAt DateTime @default(now())
 
   @@map("downloads")

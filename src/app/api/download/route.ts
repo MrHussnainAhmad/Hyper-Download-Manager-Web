@@ -1,12 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import geoip from 'geoip-lite';
 
 export async function POST(request: NextRequest) {
   try {
     const { platform, version } = await request.json();
 
+    let ip = request.headers.get('x-forwarded-for') || request.ip || '127.0.0.1';
+
+    // Handle local loopback
+    if (ip === '::1') ip = '127.0.0.1';
+
+    if (ip.includes(',')) {
+      ip = ip.split(',')[0].trim();
+    }
+
+    console.log(`[Tracking] Download from IP: ${ip}`);
+
+    const geo = geoip.lookup(ip);
+    const country = geo ? geo.country : (ip === '127.0.0.1' ? 'Localhost' : 'Unknown');
+
     await prisma.download.create({
-      data: { platform, version },
+      data: {
+        platform,
+        version,
+        country
+      },
     });
 
     return NextResponse.json({ success: true }, { status: 201 });
