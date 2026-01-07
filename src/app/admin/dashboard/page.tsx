@@ -25,6 +25,7 @@ interface PlatformConfig {
   platform: string;
   version: string;
   downloadUrl: string;
+  note?: string;
 }
 
 export default function AdminDashboard() {
@@ -43,7 +44,7 @@ export default function AdminDashboard() {
         // Ensure both platforms exist in state
         const platforms = ['windows', 'linux'];
         const fullConfigs = platforms.map(p => {
-          return configsData.find((c: any) => c.platform === p) || { platform: p, version: '', downloadUrl: '' };
+          return configsData.find((c: any) => c.platform === p) || { platform: p, version: '', downloadUrl: '', note: '' };
         });
         setConfigs(fullConfigs);
         setLoading(false);
@@ -54,13 +55,13 @@ export default function AdminDashboard() {
       });
   }, []);
 
-  const handleUpdateConfig = async (platform: string, version: string, downloadUrl: string) => {
+  const handleUpdateConfig = async (platform: string, version: string, downloadUrl: string, note: string) => {
     setSaving(true);
     try {
       const res = await fetch('/api/admin/config', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ platform, version, downloadUrl }),
+        body: JSON.stringify({ platform, version, downloadUrl, note }),
       });
       if (res.ok) {
         const updated = await res.json();
@@ -204,7 +205,7 @@ export default function AdminDashboard() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {['windows', 'linux'].map(platform => {
-            const config = configs.find(c => c.platform === platform) || { platform, version: '', downloadUrl: '' };
+            const config = configs.find(c => c.platform === platform) || { platform, version: '', downloadUrl: '', note: '' };
             return (
               <div key={platform} className="space-y-4 p-4 bg-gray-50 dark:bg-gray-700/30 rounded-lg border border-gray-100 dark:border-gray-600">
                 <h3 className="font-bold capitalize dark:text-white">{platform}</h3>
@@ -234,9 +235,22 @@ export default function AdminDashboard() {
                     className="w-full p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                   />
                 </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1 uppercase tracking-wider">Update Note (Optional)</label>
+                  <textarea
+                    value={config.note || ''}
+                    onChange={(e) => {
+                      const newNote = e.target.value;
+                      setConfigs(prev => prev.map(c => c.platform === platform ? { ...c, note: newNote } : c));
+                    }}
+                    placeholder="What's new in this version?"
+                    rows={3}
+                    className="w-full p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded text-sm dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none"
+                  />
+                </div>
                 <button
                   disabled={saving}
-                  onClick={() => handleUpdateConfig(platform, config.version, config.downloadUrl)}
+                  onClick={() => handleUpdateConfig(platform, config.version, config.downloadUrl, config.note || '')}
                   className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm font-bold transition-colors disabled:opacity-50"
                 >
                   {saving ? 'Updating...' : `Update ${platform} Link`}

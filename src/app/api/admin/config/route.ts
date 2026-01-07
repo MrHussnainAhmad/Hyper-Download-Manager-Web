@@ -13,12 +13,12 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { platform, version, downloadUrl } = body;
+    const { platform, version, downloadUrl, note } = body;
 
     const config = await prisma.platformConfig.upsert({
       where: { platform },
-      update: { version, downloadUrl },
-      create: { platform, version, downloadUrl },
+      update: { version, downloadUrl, note },
+      create: { platform, version, downloadUrl, note },
     });
 
     return NextResponse.json(config);

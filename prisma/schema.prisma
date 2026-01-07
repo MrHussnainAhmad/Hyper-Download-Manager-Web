@@ -58,6 +58,7 @@ model PlatformConfig {
   platform    String   @unique // 'windows' or 'linux'
   version     String
   downloadUrl String
+  note        String?  // Optional update note
   updatedAt   DateTime @updatedAt
 
   @@map("platform_configs")

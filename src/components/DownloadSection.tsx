@@ -6,6 +6,7 @@ interface PlatformConfig {
   platform: string;
   version: string;
   downloadUrl: string;
+  note?: string;
 }
 
 export default function DownloadSection({ configs }: { configs: PlatformConfig[] }) {
@@ -68,10 +69,17 @@ export default function DownloadSection({ configs }: { configs: PlatformConfig[]
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-2">{platform.name}</h3>
               <p className="text-gray-600 mb-1">{platform.desc}</p>
-              <div className="flex items-center justify-center gap-2 text-sm text-gray-500 mb-8">
-                <span>v{platform.config.version}</span>
-                <span>•</span>
-                <span>{platform.size}</span>
+              <div className="flex flex-col items-center justify-center mb-8 gap-2">
+                 <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <span>v{platform.config.version}</span>
+                    <span>•</span>
+                    <span>{platform.size}</span>
+                 </div>
+                 {platform.config.note && (
+                    <p className="text-sm text-blue-600 font-medium px-3 py-1 bg-blue-50 rounded-full">
+                      {platform.config.note}
+                    </p>
+                 )}
               </div>
               
               <a
