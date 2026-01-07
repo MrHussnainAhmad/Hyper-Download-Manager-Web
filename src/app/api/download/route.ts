@@ -17,10 +17,34 @@ export async function POST(request: NextRequest) {
 
     console.log(`[Tracking] Download from IP: ${ip}`);
 
+    // Log all headers for debugging purposes
+    const headersObj: Record<string, string> = {};
+    request.headers.forEach((value, key) => {
+      headersObj[key] = value;
+    });
+    console.log('[Tracking] Request Headers:', JSON.stringify(headersObj, null, 2));
+
     const geo = geolocation(request);
-    const country = geo.country || (ip === '127.0.0.1' ? 'Localhost' : 'Unknown');
+    console.log('[Tracking] Vercel Geolocation:', JSON.stringify(geo));
+
+    let country = geo.country;
+
+    if (!country) {
+      console.log('[Tracking] Geolocation helper failed, trying headers...');
+      country = request.headers.get('x-vercel-ip-country') || 
+                request.headers.get('x-client-ip-country') || 
+                request.headers.get('cf-ipcountry');
+    }
+
+    if (!country) {
+       if (ip === '127.0.0.1' || ip === '::1') {
+         country = 'Localhost';
+       } else {
+         country = 'Unknown';
+       }
+    }
     
-    console.log(`[Tracking] Detected Country: ${country}, Geo Object: ${JSON.stringify(geo)}`);
+    console.log(`[Tracking] Final Detected Country: ${country}`);
 
     await prisma.download.create({
       data: {
