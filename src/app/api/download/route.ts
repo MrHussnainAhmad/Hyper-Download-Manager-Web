@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { geolocation } from '@vercel/functions';
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,12 +17,10 @@ export async function POST(request: NextRequest) {
 
     console.log(`[Tracking] Download from IP: ${ip}`);
 
-    const country = request.headers.get('x-vercel-ip-country') || 
-                    request.headers.get('cf-ipcountry') || 
-                    (request as any).geo?.country || 
-                    (ip === '127.0.0.1' || ip === '::1' ? 'Localhost' : 'Unknown');
+    const geo = geolocation(request);
+    const country = geo.country || (ip === '127.0.0.1' ? 'Localhost' : 'Unknown');
     
-    console.log(`[Tracking] Detected Country: ${country}`);
+    console.log(`[Tracking] Detected Country: ${country}, Geo Object: ${JSON.stringify(geo)}`);
 
     await prisma.download.create({
       data: {
