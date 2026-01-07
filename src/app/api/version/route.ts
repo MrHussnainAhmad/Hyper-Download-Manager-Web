@@ -19,6 +19,7 @@ export async function GET(request: NextRequest) {
         platform: config.platform,
         version: config.version,
         downloadUrl: config.downloadUrl,
+        note: config.note,
         updatedAt: config.updatedAt,
       });
     }
