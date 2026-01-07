@@ -76,7 +76,7 @@ export default function DownloadSection({ configs }: { configs: PlatformConfig[]
                     <span>{platform.size}</span>
                  </div>
                  {platform.config.note && (
-                    <p className="text-sm text-blue-600 font-medium px-3 py-1 bg-blue-50 rounded-full">
+                    <p className="text-sm text-gray-600 mt-1">
                       {platform.config.note}
                     </p>
                  )}
