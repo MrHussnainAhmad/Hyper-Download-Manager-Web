@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     const geo = geolocation(request);
     console.log('[Tracking] Vercel Geolocation:', JSON.stringify(geo));
 
-    let country = geo.country;
+    let country: string | null = geo.country || null;
 
     if (!country) {
       console.log('[Tracking] Geolocation helper failed, trying headers...');
