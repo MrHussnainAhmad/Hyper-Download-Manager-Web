@@ -63,3 +63,35 @@ model PlatformConfig {
 
   @@map("platform_configs")
 }
+
+model License {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  email           String
+  keyHash         String    @unique
+  encryptedKey    String
+  plan            String    // 'PLUS' or 'PRO'
+  status          String    @default("active")
+  usageCount      Int       @default(0)
+  maxActivations  Int       @default(1)
+  reminderSent    Boolean   @default(false)
+  keyViewed       Boolean   @default(false)
+  stripeSessionId String?   @unique
+  createdAt       DateTime  @default(now())
+  expiresAt       DateTime?
+
+  @@map("licenses")
+}
+
+model Ad {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  type        String   // 'IMAGE', 'VIDEO', 'LINK'
+  targetTier  String   // 'FREEMIUM', 'PLUS'
+  contentUrl  String?  // URL for the image or video file
+  linkUrl     String   // Where the ad clicks to
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("ads")
+}

@@ -16,7 +16,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 font-bold text-gray-900" onClick={() => setIsMenuOpen(false)}>
-            <Image src="/icon.png" alt="HDM Logo" width={32} height={32} className="w-8 h-8" />
+            <Image src="/icon.png" alt="HDM Logo" width={48} height={40} className="w-12 h-10 shrink-0 object-contain" />
             <span className="hidden sm:inline-block text-lg">Hyper Download Manager</span>
             <span className="sm:hidden text-lg">HDM</span>
           </Link>
@@ -25,7 +25,7 @@ export default function Navbar() {
           <nav className="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-600">
             <Link href="/#features" className="hover:text-blue-600 transition-colors">Features</Link>
             <Link href="/#comparison" className="hover:text-blue-600 transition-colors">Comparison</Link>
-            <Link href="/#reviews" className="hover:text-blue-600 transition-colors">Reviews</Link>
+            <Link href="/purchase" className="hover:text-blue-600 transition-colors">Purchase</Link>
             <Link href="/submit-bug" className="hover:text-blue-600 transition-colors">Support</Link>
             <a href="#download" className="btn-primary">
               <Download className="w-4 h-4 mr-2" />
@@ -50,7 +50,7 @@ export default function Navbar() {
           <nav className="flex flex-col p-4 space-y-4 text-sm font-medium text-gray-700">
             <Link href="/#features" className="p-2 hover:bg-gray-50 rounded-md" onClick={toggleMenu}>Features</Link>
             <Link href="/#comparison" className="p-2 hover:bg-gray-50 rounded-md" onClick={toggleMenu}>Comparison</Link>
-            <Link href="/#reviews" className="p-2 hover:bg-gray-50 rounded-md" onClick={toggleMenu}>Reviews</Link>
+            <Link href="/purchase" className="p-2 hover:bg-gray-50 rounded-md" onClick={toggleMenu}>Purchase</Link>
             <Link href="/submit-bug" className="p-2 hover:bg-gray-50 rounded-md" onClick={toggleMenu}>Support</Link>
             <a href="#download" className="btn-primary w-full justify-center" onClick={toggleMenu}>
               <Download className="w-4 h-4 mr-2" />

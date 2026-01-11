@@ -7,11 +7,15 @@ import {
   MessageSquare, 
   Bug, 
   LogOut,
-  ShieldCheck
+  ShieldCheck,
+  Users,
+  Megaphone
 } from 'lucide-react';
 
 const navItems = [
   { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
+  { name: 'Users', href: '/admin/users', icon: Users },
+  { name: 'Ads', href: '/admin/ads', icon: Megaphone },
   { name: 'Bugs', href: '/admin/bugs', icon: Bug },
   { name: 'Reviews', href: '/admin/reviews', icon: MessageSquare },
 ];

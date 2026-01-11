@@ -28,7 +28,8 @@ export default function AdminLogin() {
 
       if (response.ok) {
         toast.success('Logged in successfully');
-        router.push('/admin/dashboard');
+        // Force full page reload to ensure cookie is picked up
+        window.location.href = '/admin/dashboard';
       } else {
         toast.error(data.error || 'Login failed');
       }
